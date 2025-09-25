@@ -1,7 +1,7 @@
-# Anonymous Threaded Forum
+# Drew Confessions
 Instructions for setup, Tor configuration, and usage.
 
-# Anonymous Threaded Forum
+# Drew Confessions
 
 A privacy-respecting anonymous image board...
 
