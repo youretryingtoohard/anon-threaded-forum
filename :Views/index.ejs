@@ -18,13 +18,18 @@
     <label for="image">Upload image (optional): </label>
     <input type="file" id="image" name="image" accept="image/*"><br><br>
     <button type="submit">Post</button>
-  </form>
+  </form> 
+  <form action="/search" method="GET">
+  <input type="text" name="q" placeholder="Search posts..." required>
+  <button type="submit">Search</button>
+</form>
+
 
   <hr>
 
   <% posts.forEach(function(post) { %>
     <div class="post">
-      <div class="color-block" style="background-color:<%= post.color %>"></div>
+      <div class="color-block" style="background-color: post color"></div>
       <strong>Posted at: </strong><span class="timestamp"><%= new Date(post.timestamp).toLocaleString() %></span>
       <p><%= post.text %></p>
       <% if (post.image) { %>
@@ -46,5 +51,33 @@
       </form>
     </div>
   <% }) %>
+ <!-- Search form -->
+  <form action="/search" method="GET">
+    <input type="text" name="q" placeholder="Search posts..." value="<%= query || 'fight' %>" required>
+    <button type="submit">Search</button>
+  </form>
+
+  <% if (typeof query !== 'undefined') { %>
+    <h3>Showing results for "<%= query %>"</h3>
+    <a href="/">Clear search</a>
+  <% } %>
+
+  <h2>Posts</h2>
+  <ul>
+    <% posts.forEach(post => { %>
+      <li>
+        <%= query ? post.text.replace(new RegExp(query, 'gi'), '<mark>$&</mark>') : post.text %>
+      </li>
+    <% }) %>
+  </ul>
+
+  <% if (typeof topKeywords !== 'undefined') { %>
+    <h3>Top Keywords:</h3>
+    <ul>
+      <% topKeywords.forEach(word => { %>
+        <li><a href="/search?q=<%= word %>"><%= word %></a></li>
+      <% }) %>
+    </ul>
+  <% } %>
 </body>
 </html>

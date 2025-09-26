@@ -61,3 +61,25 @@ app.listen(port, () => {
   console.log(`Forum running at http://localhost:${port}`);
 });
 
+// Search route
+app.get("/search", (req, res) => {
+  const query = req.query.q.toLowerCase();
+  const posts = loadPosts();
+
+  // Filter posts containing the keyword
+  const results = posts.filter(post => post.text.toLowerCase().includes(query));
+
+  // Optional: count top keywords
+  const allWords = posts.flatMap(p => p.text.toLowerCase().split(/\W+/));
+  const wordCounts = {};
+  allWords.forEach(word => {
+    if (word) wordCounts[word] = (wordCounts[word] || 0) + 1;
+  });
+  // Sort keywords by frequency
+  const topKeywords = Object.entries(wordCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(entry => entry[0]);
+
+  res.render("index", { posts: results, topKeywords, query });
+});
